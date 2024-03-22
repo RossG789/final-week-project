@@ -1,10 +1,16 @@
 // Importing clerks user button to have a quick and accessible way to sign out
 import { UserButton } from "@clerk/nextjs";
+import { db } from "@/db";
 
-export default function Home() {
+export default async function BasicFetch() {
+  const { rows: name } = await db.query(`SELECT * FROM restaurants`);
+  // const final = result.rows;
+
+  console.log(name);
+
   return (
     <div>
-      <h1>Final Project!</h1>
+      <h1>hello world</h1>
       <UserButton />
     </div>
   );
