@@ -1,7 +1,13 @@
-import { UserButton } from "@clerk/nextjs";
-import { currentUser } from "@clerk/nextjs";
+import {
+  currentUser,
+  SignedIn,
+  SignedOut,
+  UserButton,
+  SignInButton,
+} from "@clerk/nextjs";
 import { db } from "@/db";
-// import DataRequest from "./components/DataRequest";
+import DataRequest from "./components/DataRequest";
+import { User } from "@clerk/nextjs/server";
 
 export default async function Page() {
   const clerkUser: any = await currentUser();
@@ -46,5 +52,15 @@ export default async function Page() {
   // }
   // getStuff();
 
-  return <div className="bg-base-100">{/* <DataRequest /> */}</div>;
+  return (
+    <div className="bg-base-100">
+      <SignedIn>
+        <UserButton />
+      </SignedIn>
+      <SignedOut>
+        <SignInButton afterSignInUrl="/" afterSignUpUrl="/"></SignInButton>
+      </SignedOut>
+      <DataRequest />
+    </div>
+  );
 }
