@@ -1,4 +1,3 @@
-// Importing clerks user button to have a quick and accessible way to sign out
 import { UserButton } from "@clerk/nextjs";
 import { currentUser } from "@clerk/nextjs";
 import { db } from "@/db";
@@ -46,15 +45,10 @@ export default async function Page() {
   //   const businesses: any = result.businesses;
   // }
   // getStuff();
-
+  
   return (
-    <div>
-      <h1>hello world</h1>
-      <div>
-        <h2>THIS IS WHERE THE INFORMATION GOES</h2>
-        <DataRequest />
-      </div>
-      <UserButton />
+    <div className="bg-base-100">
+      <DataRequest />
     </div>
   );
 }

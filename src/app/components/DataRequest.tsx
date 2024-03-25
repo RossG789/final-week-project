@@ -1,11 +1,22 @@
+
+"use server";
+
 import React from "react";
+import CardSwiper from "./CardSwiper";
+
+interface Business {
+  id: string;
+  name: string;
+  image_url: string;
+  rating: number;
+  // Add other properties of a business here
+}
+
 
 export default async function DataRequest() {
-  "use server";
   const apiKey = process.env.API_KEY;
-
-  const data = await fetch(
-    "https://api.yelp.com/v3/businesses/search?location=london",
+  const response = await fetch(
+    "https://api.yelp.com/v3/businesses/search?location=london&limit=20",
     {
       method: "GET",
       headers: {
@@ -14,29 +25,15 @@ export default async function DataRequest() {
       },
     }
   );
-  const result: any = await data.json();
-  const businesses: any = result.businesses;
-  // const location = result.businesses.location;
-  // const categories = result.businesses.categories;
-  // console.log(location);
-  // console.log(categories);
-  return (
-    <div>
-      {businesses.map(
-        (business: {
-          id: string;
-          name: string;
-          image_url: string;
-          rating: number;
-        }) => (
-          <div key={business.id}>
-            <h1>{business.name}</h1>
-            <img src={business.image_url} />
-            <h3>{business.rating}</h3>
-            {/* <FunnyButton /> */}
-          </div>
-        )
-      )}
-    </div>
-  );
+
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch data from Yelp API");
+  }
+
+  const result: any = await response.json();
+  const businesses: Business[] = result.businesses;
+
+  return <CardSwiper businesses={businesses} />;
+
 }
