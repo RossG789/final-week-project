@@ -30,7 +30,7 @@ const BusinessCard: React.FC<{ business: Business }> = ({ business }) => {
   };
 
   return (
-    <div className="card glass m-5 flex flex-col items-center justify-center overflow-hidden">
+    <div className="card glass m-5 flex flex-col items-center justify-center overflow-hidden mb-28 mt-12">
       <div className="relative w-full h-96">
         <Image
           className="absolute top-0 left-0 w-full h-full object-cover"

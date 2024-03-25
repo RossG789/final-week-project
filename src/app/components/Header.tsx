@@ -4,7 +4,7 @@ import logoSVG from "../../public/assets/grumble-logo-horizontal.svg";
 
 export default function Header() {
   return (
-    <div className="navbar bg-base-100">
+    <div className="navbar sticky top-0 bg-base-100 z-10">
       <div className="flex-1">
         <Image src={logoSVG} alt="Grumble Logo" height="70" />
       </div>
