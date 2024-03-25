@@ -1,3 +1,5 @@
+import React from "react"
+
 export default async function DataRequest() {
   "use server";
   const apiKey = process.env.API_KEY;
