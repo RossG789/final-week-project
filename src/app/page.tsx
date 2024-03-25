@@ -7,22 +7,23 @@ import {
 } from "@clerk/nextjs";
 import { db } from "@/db";
 import DataRequest from "./components/DataRequest";
-import { User } from "@clerk/nextjs/server";
 
 export default async function Page() {
-  const clerkUser: any = await currentUser();
-  if (clerkUser) {
-    console.log(clerkUser);
-    const userName = clerkUser.username;
+  // const clerkUser: any = await currentUser();
+  // if (clerkUser) {
+  //   const userName = clerkUser.username;
 
-    const {
-      rows: [user_name],
-    } = await db.query("SELECT * FROM users WHERE user_name = $1", [userName]);
+  //   const {
+  //     rows: [user_name],
+  //   } = await db.query("SELECT * FROM users WHERE user_name = $1", [userName]);
 
-    if (user_name?.user_name !== userName) {
-      await db.query("INSERT INTO users (user_name) VALUES ($1)", [userName]);
-    }
-  }
+  //   if (user_name?.user_name !== userName) {
+  //     await db.query("INSERT INTO users (user_name) VALUES ($1)", [userName]);
+  //   }
+  // }
+
+  //
+
   // const clerkUser: any = await currentUser();
   // console.log(clerkUser);
   // const userName = clerkUser.username;
