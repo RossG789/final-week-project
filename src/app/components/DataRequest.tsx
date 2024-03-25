@@ -1,4 +1,4 @@
-import React from "react"
+import React from "react";
 
 export default async function DataRequest() {
   "use server";
@@ -33,6 +33,7 @@ export default async function DataRequest() {
             <h1>{business.name}</h1>
             <img src={business.image_url} />
             <h3>{business.rating}</h3>
+            {/* <FunnyButton /> */}
           </div>
         )
       )}
