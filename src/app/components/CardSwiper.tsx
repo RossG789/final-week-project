@@ -8,7 +8,6 @@ interface Business {
   name: string;
   image_url: string;
   rating: number;
-  // Add other properties of a business here
 }
 
 interface CardSwiperProps {
@@ -18,12 +17,16 @@ interface CardSwiperProps {
 const BusinessCard: React.FC<{ business: Business }> = ({ business }) => {
   const handleLike = () => {
     console.log(`Liked ${business.name}`);
-    // Add your logic for liking the business here
+    // Remove from page
+    // Add it to liked database
+    // Add animation?
   };
 
   const handleDislike = () => {
     console.log(`Disliked ${business.name}`);
-    // Add your logic for disliking the business here
+    // Remove from page
+    // Add it to disliked database
+    // Add animation?
   };
 
   return (
