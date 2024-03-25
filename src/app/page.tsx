@@ -5,7 +5,8 @@ import { db } from "@/db";
 import DataRequest from "./components/DataRequest";
 
 export default async function Page() {
-  const clerkUser = await currentUser();
+  const clerkUser: any = await currentUser();
+  console.log(clerkUser);
   const userName = clerkUser.username;
 
   const {
