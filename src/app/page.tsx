@@ -1,30 +1,41 @@
 // Importing clerks user button to have a quick and accessible way to sign out
 import { UserButton } from "@clerk/nextjs";
+import { currentUser } from "@clerk/nextjs";
 import { db } from "@/db";
 import DataRequest from "./components/DataRequest";
 
-export default function Page() {
-  // const { rows: name } = await db.query(`SELECT * FROM restaurants`);
-  // const final = result.rows;
+export default async function Page() {
+  const clerkUser = await currentUser();
+  const userName = clerkUser.username;
 
-  async function getStuff() {
-    "use server";
-    const apiKey = process.env.API_KEY;
+  const {
+    rows: [user_name],
+  } = await db.query("SELECT * FROM users WHERE user_name = $1", [userName]);
 
-    const data = await fetch(
-      "https://api.yelp.com/v3/businesses/search?location=london",
-      {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${apiKey}`,
-          accept: "application/json",
-        },
-      }
-    );
-    const result: any = await data.json();
-    const businesses: any = result.businesses;
+  // console.log(user_name.user_name);
+
+  if (user_name?.user_name !== userName) {
+    await db.query("INSERT INTO users (user_name) VALUES ($1)", [userName]);
   }
-  getStuff();
+
+  // async function getStuff() {
+  //   "use server";
+  //   const apiKey = process.env.API_KEY;
+
+  //   const data = await fetch(
+  //     "https://api.yelp.com/v3/businesses/search?location=london",
+  //     {
+  //       method: "GET",
+  //       headers: {
+  //         Authorization: `Bearer ${apiKey}`,
+  //         accept: "application/json",
+  //       },
+  //     }
+  //   );
+  //   const result: any = await data.json();
+  //   const businesses: any = result.businesses;
+  // }
+  // getStuff();
 
   return (
     <div>
