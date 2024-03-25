@@ -1,3 +1,4 @@
+
 "use server";
 
 import React from "react";
@@ -10,6 +11,7 @@ interface Business {
   rating: number;
   // Add other properties of a business here
 }
+
 
 export default async function DataRequest() {
   const apiKey = process.env.API_KEY;
@@ -24,6 +26,7 @@ export default async function DataRequest() {
     }
   );
 
+
   if (!response.ok) {
     throw new Error("Failed to fetch data from Yelp API");
   }
@@ -32,4 +35,5 @@ export default async function DataRequest() {
   const businesses: Business[] = result.businesses;
 
   return <CardSwiper businesses={businesses} />;
+
 }

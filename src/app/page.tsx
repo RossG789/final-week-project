@@ -5,18 +5,27 @@ import DataRequest from "./components/DataRequest";
 
 export default async function Page() {
   const clerkUser: any = await currentUser();
-  console.log(clerkUser);
-  const userName = clerkUser.username;
+  if (clerkUser) {
+    console.log(clerkUser);
+    const userName = clerkUser.username;
 
-  const {
-    rows: [user_name],
-  } = await db.query("SELECT * FROM users WHERE user_name = $1", [userName]);
+    const {
+      rows: [user_name],
+    } = await db.query("SELECT * FROM users WHERE user_name = $1", [userName]);
+
+    if (user_name?.user_name !== userName) {
+      await db.query("INSERT INTO users (user_name) VALUES ($1)", [userName]);
+    }
+  }
+  // const clerkUser: any = await currentUser();
+  // console.log(clerkUser);
+  // const userName = clerkUser.username;
+
+  // const {
+  //   rows: [user_name],
+  // } = await db.query("SELECT * FROM users WHERE user_name = $1", [userName]);
 
   // console.log(user_name.user_name);
-
-  if (user_name?.user_name !== userName) {
-    await db.query("INSERT INTO users (user_name) VALUES ($1)", [userName]);
-  }
 
   // async function getStuff() {
   //   "use server";
