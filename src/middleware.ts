@@ -4,6 +4,7 @@ import { authMiddleware } from "@clerk/nextjs";
 // setting public routes
 export default authMiddleware({
   // Currently our only public route is the homepage. Any new routes to be public will need to be specified.
+  debug: true,
   publicRoutes: ["/"],
 });
 
