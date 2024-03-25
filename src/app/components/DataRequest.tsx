@@ -20,13 +20,20 @@ export default async function DataRequest() {
   // console.log(categories);
   return (
     <div>
-      {businesses.map((business) => (
-        <div key={business.id}>
-          <h1>{business.name}</h1>
-          <img src={business.image_url} />
-          <h3>{business.rating}</h3>
-        </div>
-      ))}
+      {businesses.map(
+        (business: {
+          id: string;
+          name: string;
+          image_url: string;
+          rating: number;
+        }) => (
+          <div key={business.id}>
+            <h1>{business.name}</h1>
+            <img src={business.image_url} />
+            <h3>{business.rating}</h3>
+          </div>
+        )
+      )}
     </div>
   );
 }
