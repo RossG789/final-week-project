@@ -1,7 +1,7 @@
 import { UserButton } from "@clerk/nextjs";
 import { currentUser } from "@clerk/nextjs";
 import { db } from "@/db";
-import DataRequest from "./components/DataRequest";
+// import DataRequest from "./components/DataRequest";
 
 export default async function Page() {
   const clerkUser: any = await currentUser();
@@ -45,10 +45,6 @@ export default async function Page() {
   //   const businesses: any = result.businesses;
   // }
   // getStuff();
-  
-  return (
-    <div className="bg-base-100">
-      <DataRequest />
-    </div>
-  );
+
+  return <div className="bg-base-100">{/* <DataRequest /> */}</div>;
 }
