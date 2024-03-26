@@ -1,6 +1,6 @@
-import { UserButton } from "@clerk/nextjs";
 import Image from "next/image";
 import logoSVG from "../../public/assets/grumble-logo-horizontal.svg";
+import { SignedIn, SignedOut, UserButton, SignInButton } from "@clerk/nextjs";
 
 export default function Header() {
   return (
@@ -15,8 +15,16 @@ export default function Header() {
             role="button"
             className="btn btn-ghost btn-circle avatar"
           >
-            <div className="w-10 rounded-full">
-              <UserButton />
+            <div>
+              <SignedIn>
+                <UserButton />
+              </SignedIn>
+              <SignedOut>
+                <SignInButton
+                  afterSignInUrl="/"
+                  afterSignUpUrl="/"
+                ></SignInButton>
+              </SignedOut>
             </div>
           </div>
           <ul

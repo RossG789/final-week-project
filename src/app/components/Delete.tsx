@@ -31,5 +31,5 @@ export default async function DeleteBtn(business: Business) {
     console.error("Error deleting record:", error);
     throw error;
   }
-  return <button>Delete</button>;
-}
+  return <button className="btn btn-lrg btn-primary mr-4">Delete</button>;
+};
