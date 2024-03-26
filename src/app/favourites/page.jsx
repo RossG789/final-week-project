@@ -10,7 +10,7 @@ export default async function Page() {
   if (!userId) {
     redirect("/sign-in");
   }
-  const clerkUser: any = await currentUser();
+  const clerkUser = await currentUser();
   const userName = clerkUser.username;
 
   const {
@@ -37,7 +37,7 @@ export default async function Page() {
         </h1>
       </div>
 
-      {results.map((result: any) => (
+      {results.map((result) => (
         <div key={result.id} className="mx-auto max-w-screen-lg">
           <div
             className="card glass m-5 flex flex-col items-center justify-center overflow-hidden mb-28 mt-12 md:flex-row md:items-stretch"
@@ -61,7 +61,7 @@ export default async function Page() {
                 {result.name}
               </p>
               <div className="flex justify-center md:justify-start mt-4">
-                <DeleteBtn />
+                <DeleteBtn businessId={`${result.restaurant_id}`} />
               </div>
             </div>
           </div>
