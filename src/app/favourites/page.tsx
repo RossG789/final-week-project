@@ -35,7 +35,7 @@ export default async function Page() {
       <div>
         <h1>Your favourites are located below</h1>
 
-        {results.map((result) => (
+        {results.map((result: any) => (
           <div key={result.id}>
             <p>{result.name}</p>
             <Image
