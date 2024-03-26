@@ -16,11 +16,14 @@ export default async function Page() {
     const userName = clerkUser.username;
 
     const {
-      rows: [user_name],
-    } = await db.query("SELECT * FROM users WHERE user_name = $1", [userName]);
+      rows: [id],
+    } = await db.query("SELECT * FROM users WHERE id = $1", [userId]);
 
-    if (user_name?.user_name !== userName) {
-      await db.query("INSERT INTO users (user_name) VALUES ($1)", [userName]);
+    if (!userName) {
+      await db.query("INSERT INTO users (username, id) VALUES ($1, $2)", [
+        userName,
+        userId,
+      ]);
     }
   }
 

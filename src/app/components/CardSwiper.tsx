@@ -2,6 +2,8 @@
 
 import React from "react";
 import Image from "next/image";
+import HandleLike from "./HandleLike";
+import HandleDislike from "./HandleDislike";
 
 interface Business {
   id: string;
@@ -15,20 +17,6 @@ interface CardSwiperProps {
 }
 
 const BusinessCard: React.FC<{ business: Business }> = ({ business }) => {
-  const handleLike = () => {
-    console.log(`Liked ${business.name}`);
-    // Remove from page
-    // Add it to liked database
-    // Add animation?
-  };
-
-  const handleDislike = () => {
-    console.log(`Disliked ${business.name}`);
-    // Remove from page
-    // Add it to disliked database
-    // Add animation?
-  };
-
   return (
     <div className="card glass m-5 flex flex-col items-center justify-center overflow-hidden mb-28 mt-12">
       <div className="relative w-full h-96">
@@ -46,11 +34,14 @@ const BusinessCard: React.FC<{ business: Business }> = ({ business }) => {
         <div className="flex justify-center mt-4">
           <button
             className="btn btn-lrg btn-primary mr-4"
-            onClick={handleDislike}
+            onClick={() => HandleDislike(business)}
           >
             Dislike
           </button>
-          <button className="btn btn-primary" onClick={handleLike}>
+          <button
+            className="btn btn-primary"
+            onClick={() => HandleLike(business)}
+          >
             Like
           </button>
         </div>
