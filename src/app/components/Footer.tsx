@@ -10,7 +10,7 @@ export default function Footer() {
         <a href="/favourites">Favourites</a>
       </li>
       <li className="btn btn-primary">
-        <a>Profile</a>
+        <a href="/profile">Profile</a>
       </li>
     </ul>
   );

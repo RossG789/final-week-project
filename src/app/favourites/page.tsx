@@ -61,7 +61,7 @@ export default async function Page() {
                 {result.name}
               </p>
               <div className="flex justify-center md:justify-start mt-4">
-                <DeleteBtn:any />
+                <DeleteBtn />
               </div>
             </div>
           </div>

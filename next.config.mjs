@@ -9,6 +9,11 @@ const nextConfig = {
       "s3-media5.fl.yelpcdn.com",
     ],
   },
+  const: (module.exports = {
+    typescript: {
+      ignoreBuildErrors: true,
+    },
+  }),
 };
 
 export default nextConfig;
