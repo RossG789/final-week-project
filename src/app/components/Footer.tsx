@@ -4,10 +4,10 @@ export default function Footer() {
   return (
     <ul className="menu menu-horizontal bg-base-200 fixed bottom-0 w-screen flex place-content-evenly py-5">
       <li className="btn btn-primary">
-        <a>Home</a>
+        <a href="/">Home</a>
       </li>
       <li className="btn btn-primary">
-        <a>Favourites</a>
+        <a href="/favourites">Favourites</a>
       </li>
       <li className="btn btn-primary">
         <a>Profile</a>
