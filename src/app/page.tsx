@@ -12,7 +12,7 @@ export default async function Page() {
       rows: [id],
     } = await db.query("SELECT * FROM users WHERE id = $1", [userId]);
 
-    if (!userName) {
+    if (!userId) {
       await db.query("INSERT INTO users (username, id) VALUES ($1, $2)", [
         userName,
         userId,

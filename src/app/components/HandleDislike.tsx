@@ -17,12 +17,16 @@ export default async function HandleDislike(business: Business) {
   console.log(`Disliked ${business.name}`);
   try {
     await db.query(
-      `
-     DELETE FROM likes
-     WHERE restaurant_id = $1 AND users_id = $2
- `,
-      [business.id, userId]
+      `INSERT INTO restaurants (restaurant_id, name,img_url) VALUES ($1, $2, $3)`,
+      [business.id, business.name, business.image_url]
     );
+    //     await db.query(
+    //       `
+    //      DELETE FROM likes
+    //      WHERE restaurant_id = $1 AND users_id = $2
+    //  `,
+    //   [business.id, userId]
+    // );
     await db.query(
       `
       INSERT INTO dislikes (restaurant_id, users_id) VALUES ($1, $2)`,
