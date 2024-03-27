@@ -1,6 +1,7 @@
 import Image from "next/image";
 import logoSVG from "../../public/assets/grumble-logo-horizontal.svg";
 import { SignedIn, SignedOut, UserButton, SignInButton } from "@clerk/nextjs";
+import { redirect } from "next/navigation";
 
 export default function Header() {
   return (
