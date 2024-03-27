@@ -34,3 +34,11 @@ export default async function DeleteBtn({ businessId }) {
   }
   return <button className="btn btn-lrg btn-primary mr-4">Delete</button>;
 }
+
+//     await db.query(
+//       `
+//      DELETE FROM likes
+//      WHERE restaurant_id = $1 AND users_id = $2
+//  `,
+//   [business.id, userId]
+// );

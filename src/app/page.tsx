@@ -4,6 +4,7 @@ import DataRequest from "./components/DataRequest";
 
 export default async function Page() {
   const { userId } = auth();
+
   if (userId) {
     const clerkUser: any = await currentUser();
     const userName = clerkUser.username;
@@ -12,14 +13,13 @@ export default async function Page() {
       rows: [id],
     } = await db.query("SELECT * FROM users WHERE id = $1", [userId]);
 
-    if (!userId) {
+    if (!id) {
       await db.query("INSERT INTO users (username, id) VALUES ($1, $2)", [
         userName,
         userId,
       ]);
     }
   }
-
   return (
     <div className="bg-base-100">
       <DataRequest />
