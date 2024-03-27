@@ -20,6 +20,15 @@ export default async function HandleLike(business: Business) {
       } = await db.query(`SELECT * FROM restaurants WHERE restaurant_id = $1`, [
         business.id,
       ]);
+      if (!id) {
+        await db.query(
+          `INSERT INTO restaurants (restaurant_id, name,img_url) VALUES ($1, $2, $3)`,
+          [business.id, business.name, business.image_url]
+        );
+
+        console.log(business.id);
+      }
+
       const {
         rows: [likesid],
       } = await db.query(
@@ -30,14 +39,6 @@ export default async function HandleLike(business: Business) {
         await db.query(
           `INSERT INTO likes (users_id, restaurant_id) VALUES ($1, $2)`,
           [userId, business.id]
-        );
-      }
-
-      console.log(business.id);
-      if (!business.id) {
-        await db.query(
-          `INSERT INTO restaurants (restaurant_id, name,img_url) VALUES ($1, $2, $3)`,
-          [business.id, business.name, business.image_url]
         );
       }
     }
