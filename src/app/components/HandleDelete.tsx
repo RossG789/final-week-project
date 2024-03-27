@@ -13,8 +13,6 @@ interface Favourite {
 }
 
 export default async function HandleDelete(favourite: Favourite) {
-  console.log(`Disliked ${favourite.name}`);
-
   try {
     await db.query(
       `
@@ -23,12 +21,10 @@ export default async function HandleDelete(favourite: Favourite) {
      `,
       [favourite.restaurant_id, userId]
     );
-
-    console.log("record deleted successfully");
   } catch (error) {
     console.error("Error deleting record:", error);
     throw error;
   }
-  // revalidatePath("/favourites");
+  revalidatePath("/favourites");
   return <Toast message={"You have deleted this from the profile page "} />;
 }

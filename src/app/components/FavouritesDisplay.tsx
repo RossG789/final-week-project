@@ -57,10 +57,12 @@ const FavouritesDisplay: React.FC<FavouriteProps> = ({ favourites }) => {
   return (
     <div>
       <div className="text-center">
-        <h2 className="text-2xl text-primary mb-5">
+        <h2 className="px-2 text-2xl text-primary mb-5">
           Welcome to your Favourites page.
         </h2>
-        <p>Delete a favourite if you no longer want it to display</p>
+        <p className="px-2">
+          Delete a favourite if you no longer want it to display
+        </p>
       </div>
       {favourites.map((favourite) => (
         <FavouriteCard key={favourite.restaurant_id} favourite={favourite} />

@@ -12,9 +12,9 @@ export default function Header() {
       <div className="flex-none gap-2">
         <div className="dropdown dropdown-end">
           <div tabIndex={0} role="button">
-            <div>
+            <div className="mr-4">
               <SignedIn>
-                <UserButton />
+                <UserButton afterSignOutUrl="/" />
               </SignedIn>
               <SignedOut>
                 <SignInButton
