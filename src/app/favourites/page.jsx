@@ -1,3 +1,4 @@
+"use server";
 import { auth, currentUser } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 import { db } from "@/db";
