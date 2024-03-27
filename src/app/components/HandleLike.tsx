@@ -13,24 +13,37 @@ export default async function HandleLike(business: Business) {
   console.log(`Liked ${business.name}`);
 
   try {
+
     const { userId } = auth();
 
-    await db.query(`SELECT * FROM restaurants WHERE restaurant_id = $1`, [
-      business.id,
-    ]);
-    console.log(business.id);
+    if (business.id) {
+      const {
+        rows: [id],
+      } = await db.query(`SELECT * FROM restaurants WHERE restaurant_id = $1`, [
+        business.id,
+      ]);
+      if (!id) {
+        await db.query(
+          `INSERT INTO restaurants (restaurant_id, name,img_url) VALUES ($1, $2, $3)`,
+          [business.id, business.name, business.image_url]
+        );
 
-    if (!business.id) {
-      await db.query(
-        `INSERT INTO restaurants (restaurant_id, name, img_url) VALUES ($1, $2, $3)`,
-        [business.id, business.name, business.image_url]
+        console.log(business.id);
+      }
+
+      const {
+        rows: [likesid],
+      } = await db.query(
+        `SELECT * FROM likes WHERE restaurant_id = $1 AND users_id = $2`,
+        [business.id, userId]
+
       );
-    }
-
-    if (userId) {
-      await db.query(`INSERT INTO likes (users_id) VALUES ($1)`, [userId]);
-    } else {
-      console.log("User is not authenticated");
+      if (!likesid) {
+        await db.query(
+          `INSERT INTO likes (users_id, restaurant_id) VALUES ($1, $2)`,
+          [userId, business.id]
+        );
+      }
     }
   } catch (error) {
     console.error("Error liking restaurant:", error);
