@@ -25,7 +25,7 @@ export default async function FavouritesFetch() {
     rows: [user_id],
   } = await db.query("SELECT * FROM users WHERE id = $1", [userId]);
 
-  const id = user_id.id;
+  const id = user_id;
 
   const { rows: results } = await db.query(
     `SELECT restaurants.restaurant_id, restaurants.name, restaurants.img_url

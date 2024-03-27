@@ -22,14 +22,6 @@ const FavouriteCard: React.FC<{ favourite: Favourite }> = ({ favourite }) => {
         role="region"
         aria-label={`Favourite card for ${favourite.name}`}
       >
-        <div>
-          <h1
-            className="card-title justify-center text-4xl md:text-6xl md:justify-start"
-            aria-label={favourite.name}
-          >
-            {favourite.name}
-          </h1>
-        </div>
         <div className="relative w-full md:w-1/2 h-96">
           <Image
             className="absolute top-0 left-0 w-full h-full object-cover"
@@ -40,6 +32,12 @@ const FavouriteCard: React.FC<{ favourite: Favourite }> = ({ favourite }) => {
           />
         </div>
         <div className="card-body p-6 text-center md:text-left md:w-1/2 mt-4 md:mt-0 flex flex-col justify-between">
+          <h1
+            className="card-title justify-center text-4xl md:text-6xl md:justify-start"
+            aria-label={favourite.name}
+          >
+            {favourite.name}
+          </h1>
           <div className="flex justify-center md:justify-start mt-4">
             <button
               className="btn btn-lrg btn-primary mr-4"
