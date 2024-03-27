@@ -3,6 +3,7 @@
 import { db } from "@/db";
 import { auth } from "@clerk/nextjs";
 import { revalidatePath } from "next/cache";
+import Toast from "./Toast";
 const { userId } = auth();
 
 interface Favourite {
@@ -22,6 +23,7 @@ export default async function HandleDelete(favourite: Favourite) {
      `,
       [favourite.restaurant_id, userId]
     );
+    <Toast />;
 
     console.log("record deleted successfully");
   } catch (error) {
