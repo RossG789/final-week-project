@@ -1,9 +1,9 @@
 "use client";
-
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import HandleLike from "./HandleLike";
 import HandleDislike from "./HandleDislike";
+import DataFetcher from "./DataFetcher";
 
 interface Business {
   id: string;
@@ -12,11 +12,11 @@ interface Business {
   rating: number;
 }
 
-interface CardSwiperProps {
-  businesses: Business[];
-}
-
-const BusinessCard: React.FC<{ business: Business }> = ({ business }) => {
+const BusinessCard: React.FC<{
+  business: Business;
+  handleLike: () => void;
+  handleDislike: () => void;
+}> = ({ business, handleLike, handleDislike }) => {
   return (
     <div className="mx-auto max-w-screen-lg">
       <div
@@ -31,6 +31,7 @@ const BusinessCard: React.FC<{ business: Business }> = ({ business }) => {
             alt={`Image of ${business.name}`}
             fill
             sizes="100vw"
+            priority
           />
         </div>
         <div className="card-body p-6 text-center md:text-left md:w-1/2 mt-4 md:mt-0 flex flex-col justify-between">
@@ -48,14 +49,14 @@ const BusinessCard: React.FC<{ business: Business }> = ({ business }) => {
           <div className="flex justify-center md:justify-start mt-4">
             <button
               className="btn btn-lrg btn-primary mr-4"
-              onClick={() => HandleDislike(business)}
+              onClick={handleDislike}
               aria-label={`Dislike ${business.name}`}
             >
               Dislike
             </button>
             <button
               className="btn btn-primary"
-              onClick={() => HandleLike(business)}
+              onClick={handleLike}
               aria-label={`Like ${business.name}`}
             >
               Like
@@ -67,20 +68,46 @@ const BusinessCard: React.FC<{ business: Business }> = ({ business }) => {
   );
 };
 
-const CardSwiper: React.FC<CardSwiperProps> = ({ businesses }) => {
+export default function CardSwiper() {
+  const { businesses, isLoading, error, fetchMoreBusinesses } = DataFetcher();
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const handleLike = () => {
+    HandleLike(businesses[currentIndex]);
+    nextBusiness();
+  };
+
+  const handleDislike = () => {
+    HandleDislike(businesses[currentIndex]);
+    nextBusiness();
+  };
+
+  const nextBusiness = () => {
+    if (currentIndex < businesses.length - 1) {
+      setCurrentIndex(currentIndex + 1);
+    } else {
+      fetchMoreBusinesses();
+    }
+  };
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
   return (
     <div>
-      <div className="text-center">
-        <h2 className="text-2xl text-primary mb-5">
-          Welcome to your food suggestions page.
-        </h2>
-        <p>Like a restaurant to add it to your favourites.</p>
-      </div>
-      {businesses.map((business) => (
-        <BusinessCard key={business.id} business={business} />
-      ))}
+      {businesses.length > 0 && (
+        <BusinessCard
+          business={businesses[currentIndex]}
+          key={businesses[currentIndex].id}
+          handleLike={handleLike}
+          handleDislike={handleDislike}
+        />
+      )}
     </div>
   );
-};
-
-export default CardSwiper;
+}

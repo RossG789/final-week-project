@@ -6,7 +6,7 @@ export default function Header() {
   return (
     <div className="navbar sticky top-0 bg-base-100 z-10">
       <div className="flex-1">
-        <Image src={logoSVG} alt="Grumble Logo" height="70" />
+        <Image src={logoSVG} alt="Grumble Logo" height="70" priority />
       </div>
       <div className="flex-none gap-2">
         <div className="dropdown dropdown-end">

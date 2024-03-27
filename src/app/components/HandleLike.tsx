@@ -1,19 +1,21 @@
 "use server";
-
 import { auth } from "@clerk/nextjs";
 import { db } from "@/db";
-
-const { userId } = auth();
 
 interface Business {
   id: string;
   name: string;
   image_url: string;
+  rating: number;
 }
 
 export default async function HandleLike(business: Business) {
   console.log(`Liked ${business.name}`);
+
   try {
+
+    const { userId } = auth();
+
     if (business.id) {
       const {
         rows: [id],
@@ -34,6 +36,7 @@ export default async function HandleLike(business: Business) {
       } = await db.query(
         `SELECT * FROM likes WHERE restaurant_id = $1 AND users_id = $2`,
         [business.id, userId]
+
       );
       if (!likesid) {
         await db.query(
@@ -46,7 +49,4 @@ export default async function HandleLike(business: Business) {
     console.error("Error liking restaurant:", error);
     throw error;
   }
-  // Remove from page
-  // Add it to liked database
-  // Add animation?
 }
