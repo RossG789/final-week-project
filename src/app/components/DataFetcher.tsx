@@ -1,4 +1,4 @@
-"use client";
+// DataFetcher.tsx
 
 import { useState, useEffect, useCallback } from "react";
 
@@ -9,63 +9,44 @@ interface Business {
   rating: number;
 }
 
-interface DataFetcherProps {
-  initialData: Business[];
-}
+export default function DataFetcher() {
+  const [businesses, setBusinesses] = useState<Business[]>([]);
+  const [offset, setOffset] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-export default function DataFetcher({ initialData }: DataFetcherProps) {
-  const [businesses, setBusinesses] = useState<Business[]>(initialData);
-  const [offset, setOffset] = useState(20);
+  const fetchData = useCallback(async (currentOffset: number) => {
+    setIsLoading(true);
+    try {
+      const response = await fetch(`/api/proxy?offset=${currentOffset}`);
+      console.log(response);
 
-  const fetchData = useCallback(async () => {
-    const apiKey = process.env.API_KEY;
-    const response = await fetch(
-      `https://api.yelp.com/v3/businesses/search?location=london&limit=20&offset=${offset}`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${apiKey}`,
-          accept: "application/json",
-        },
+      if (!response.ok) {
+        throw new Error("Failed to fetch data");
       }
-    );
 
-    if (!response.ok) {
-      throw new Error("Failed to fetch data from Yelp API");
-    }
+      const result = await response.json();
+      const newBusinesses: Business[] = result.businesses;
 
-    const result: any = await response.json();
-    const newBusinesses: Business[] = result.businesses;
-
-    if (newBusinesses.length > 0) {
       setBusinesses((prevBusinesses) => [...prevBusinesses, ...newBusinesses]);
-      setOffset(offset + 20);
-    } else {
-      console.log("No more businesses found");
+      setIsLoading(false);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        setError("An unknown error occurred");
+      }
+      setIsLoading(false);
     }
-  }, [offset]);
+  }, []);
 
   useEffect(() => {
-    const fetchMoreBusinesses = () => {
-      fetchData();
-    };
+    fetchData(offset);
+  }, [offset, fetchData]);
 
-    const handleScroll = () => {
-      const scrollHeight = document.documentElement.scrollHeight;
-      const scrollTop = document.documentElement.scrollTop;
-      const clientHeight = document.documentElement.clientHeight;
+  const fetchMoreBusinesses = () => {
+    setOffset((prevOffset) => prevOffset + 20);
+  };
 
-      if (scrollTop + clientHeight >= scrollHeight) {
-        fetchMoreBusinesses();
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, [fetchData]);
-
-  return { businesses };
+  return { businesses, isLoading, error, fetchMoreBusinesses };
 }

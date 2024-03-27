@@ -1,18 +1,15 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import HandleLike from "./HandleLike";
 import HandleDislike from "./HandleDislike";
+import DataFetcher from "./DataFetcher";
 
 interface Business {
   id: string;
   name: string;
   image_url: string;
   rating: number;
-}
-
-interface CardSwiperProps {
-  initialBusinesses: Business[];
 }
 
 const BusinessCard: React.FC<{
@@ -34,6 +31,7 @@ const BusinessCard: React.FC<{
             alt={`Image of ${business.name}`}
             fill
             sizes="100vw"
+            priority
           />
         </div>
         <div className="card-body p-6 text-center md:text-left md:w-1/2 mt-4 md:mt-0 flex flex-col justify-between">
@@ -70,48 +68,9 @@ const BusinessCard: React.FC<{
   );
 };
 
-export default function CardSwiper({ initialBusinesses }: CardSwiperProps) {
-  const [businesses, setBusinesses] = useState<Business[]>(initialBusinesses);
-  const [offset, setOffset] = useState(20);
+export default function CardSwiper() {
+  const { businesses, isLoading, error, fetchMoreBusinesses } = DataFetcher();
   const [currentIndex, setCurrentIndex] = useState(0);
-
-  const fetchData = async () => {
-    const apiKey = process.env.API_KEY;
-    const response = await fetch(
-      `https://api.yelp.com/v3/businesses/search?location=london&limit=20&offset=${offset}`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${apiKey}`,
-          accept: "application/json",
-        },
-      }
-    );
-
-    if (!response.ok) {
-      throw new Error("Failed to fetch data from Yelp API");
-    }
-
-    const result: any = await response.json();
-    const newBusinesses: Business[] = result.businesses;
-
-    if (newBusinesses.length > 0) {
-      setBusinesses((prevBusinesses) => [...prevBusinesses, ...newBusinesses]);
-      setOffset(offset + 20);
-    } else {
-      console.log("No more businesses found");
-    }
-  };
-
-  useEffect(() => {
-    const fetchMoreBusinesses = () => {
-      fetchData();
-    };
-
-    if (currentIndex === businesses.length - 1) {
-      fetchMoreBusinesses();
-    }
-  }, [currentIndex, businesses.length]);
 
   const handleLike = () => {
     HandleLike(businesses[currentIndex]);
@@ -126,17 +85,21 @@ export default function CardSwiper({ initialBusinesses }: CardSwiperProps) {
   const nextBusiness = () => {
     if (currentIndex < businesses.length - 1) {
       setCurrentIndex(currentIndex + 1);
+    } else {
+      fetchMoreBusinesses();
     }
   };
 
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
   return (
     <div>
-      <div className="text-center">
-        <h2 className="text-2xl text-primary mb-5">
-          Welcome to your food suggestions page.
-        </h2>
-        <p>Like a restaurant to add it to your favourites.</p>
-      </div>
       {businesses.length > 0 && (
         <BusinessCard
           business={businesses[currentIndex]}
