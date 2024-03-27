@@ -2,7 +2,10 @@
 
 import React from "react";
 import Image from "next/image";
+import { db } from "@/db";
+import { auth } from "@clerk/nextjs";
 
+const { userId } = auth();
 interface Business {
   id: string;
   name: string;
@@ -15,12 +18,18 @@ interface CardSwiperProps {
 }
 
 const BusinessCard: React.FC<{ business: Business }> = ({ business }) => {
-  const handleLike = () => {
+  async function handleLike() {
     console.log(`Liked ${business.name}`);
+    await db.query(
+      `INSERT INTO restaurants (restaurant_id, name,img_url) VALUES (${business.id}, ${business.name}, ${business.image_url})`
+    );
+    await db.query(
+      `INSERT INTO likes restaurant_id and users_id VALUES (${business.id}, ${userId}) `
+    );
     // Remove from page
     // Add it to liked database
     // Add animation?
-  };
+  }
 
   const handleDislike = () => {
     console.log(`Disliked ${business.name}`);

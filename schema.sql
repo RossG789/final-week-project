@@ -1,5 +1,5 @@
 CREATE TABLE users (
-id INT SERIAL PRIMARY KEY,
+id TEXT PRIMARY KEY,
 username TEXT,
 )
 
@@ -11,8 +11,6 @@ img_url TEXT
 )
 
 CREATE TABLE dislikes (
-
-id SERIAL PRIMARY KEY,
 users_id TEXT,
 restaurant_id TEXT,
 FOREIGN KEY (users_id) REFERENCES users (id),
@@ -20,7 +18,6 @@ FOREIGN KEY (restaurant_id) REFERENCES restaurants (id)
 );
 
 CREATE TABLE likes (
-id SERIAL PRIMARY KEY,
 users_id TEXT,
 restaurant_id TEXT,
 FOREIGN KEY (users_id) REFERENCES users (id),
