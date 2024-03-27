@@ -23,12 +23,12 @@ export default async function HandleDelete(favourite: Favourite) {
      `,
       [favourite.restaurant_id, userId]
     );
-    <Toast />;
 
     console.log("record deleted successfully");
   } catch (error) {
     console.error("Error deleting record:", error);
     throw error;
   }
-  revalidatePath("/favourites");
+  // revalidatePath("/favourites");
+  return <Toast message={"You have deleted this from the profile page "} />;
 }
