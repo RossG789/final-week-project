@@ -1,10 +1,7 @@
 "use server";
-
 import React from "react";
 import { auth } from "@clerk/nextjs";
 import { db } from "@/db";
-
-const { userId } = auth();
 
 interface Business {
   id: string;
@@ -15,37 +12,27 @@ interface Business {
 
 export default async function HandleDislike(business: Business) {
   console.log(`Disliked ${business.name}`);
+
   try {
+    const { userId } = auth();
+
     await db.query(
-      `INSERT INTO restaurants (restaurant_id, name,img_url) VALUES ($1, $2, $3)`,
+      `INSERT INTO restaurants (restaurant_id, name, img_url) VALUES ($1, $2, $3)`,
       [business.id, business.name, business.image_url]
     );
-    //     await db.query(
-    //       `
-    //      DELETE FROM likes
-    //      WHERE restaurant_id = $1 AND users_id = $2
-    //  `,
-    //   [business.id, userId]
-    // );
-    await db.query(
-      `
-      INSERT INTO dislikes (restaurant_id, users_id) VALUES ($1, $2)`,
-      [business.id, userId]
-    );
-    //    await db.query(
-    //      `
-    //      DELETE FROM restaurants
-    //      WHERE restaurant_id = $1
-    // `,
-    // [business.id]
-    // );
 
-    console.log("record deleted successfully");
+    if (userId) {
+      await db.query(
+        `INSERT INTO dislikes (restaurant_id, users_id) VALUES ($1, $2)`,
+        [business.id, userId]
+      );
+    } else {
+      console.log("User is not authenticated");
+    }
+
+    console.log("Record deleted successfully");
   } catch (error) {
-    console.error("Error deleting record:", error);
+    console.error("Error disliking restaurant:", error);
     throw error;
   }
 }
-// Remove from page
-// Add it to disliked database
-// Add animation?

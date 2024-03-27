@@ -1,6 +1,5 @@
 "use server";
 
-import React from "react";
 import CardSwiper from "./CardSwiper";
 
 interface Business {
@@ -8,7 +7,6 @@ interface Business {
   name: string;
   image_url: string;
   rating: number;
-  // Add other properties of a business here
 }
 
 export default async function DataRequest() {
@@ -29,7 +27,7 @@ export default async function DataRequest() {
   }
 
   const result: any = await response.json();
-  const businesses: Business[] = result.businesses;
+  const initialBusinesses: Business[] = result.businesses;
 
-  return <CardSwiper businesses={businesses} />;
+  return <CardSwiper initialBusinesses={initialBusinesses} />;
 }

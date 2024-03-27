@@ -1,28 +1,34 @@
-import { currentUser, auth } from "@clerk/nextjs";
-import { db } from "@/db";
-import DataRequest from "./components/DataRequest";
+"use server";
 
-export default async function Page() {
-  const { userId } = auth();
-  if (userId) {
-    const clerkUser: any = await currentUser();
-    const userName = clerkUser.username;
+import React from "react";
+import CardSwiper from "./components/CardSwiper";
 
-    const {
-      rows: [id],
-    } = await db.query("SELECT * FROM users WHERE id = $1", [userId]);
+interface Business {
+  id: string;
+  name: string;
+  image_url: string;
+  rating: number;
+}
 
-    if (!userId) {
-      await db.query("INSERT INTO users (username, id) VALUES ($1, $2)", [
-        userName,
-        userId,
-      ]);
+export default async function DataRequest() {
+  const apiKey = process.env.API_KEY;
+  const response = await fetch(
+    "https://api.yelp.com/v3/businesses/search?location=london&limit=20",
+    {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        accept: "application/json",
+      },
     }
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch data from Yelp API");
   }
 
-  return (
-    <div className="bg-base-100">
-      <DataRequest />
-    </div>
-  );
+  const result: any = await response.json();
+  const initialBusinesses: Business[] = result.businesses;
+
+  return <CardSwiper initialBusinesses={initialBusinesses} />;
 }

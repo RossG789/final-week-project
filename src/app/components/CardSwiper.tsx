@@ -1,6 +1,5 @@
 "use client";
-
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import HandleLike from "./HandleLike";
 import HandleDislike from "./HandleDislike";
@@ -13,10 +12,14 @@ interface Business {
 }
 
 interface CardSwiperProps {
-  businesses: Business[];
+  initialBusinesses: Business[];
 }
 
-const BusinessCard: React.FC<{ business: Business }> = ({ business }) => {
+const BusinessCard: React.FC<{
+  business: Business;
+  handleLike: () => void;
+  handleDislike: () => void;
+}> = ({ business, handleLike, handleDislike }) => {
   return (
     <div className="mx-auto max-w-screen-lg">
       <div
@@ -48,14 +51,14 @@ const BusinessCard: React.FC<{ business: Business }> = ({ business }) => {
           <div className="flex justify-center md:justify-start mt-4">
             <button
               className="btn btn-lrg btn-primary mr-4"
-              onClick={() => HandleDislike(business)}
+              onClick={handleDislike}
               aria-label={`Dislike ${business.name}`}
             >
               Dislike
             </button>
             <button
               className="btn btn-primary"
-              onClick={() => HandleLike(business)}
+              onClick={handleLike}
               aria-label={`Like ${business.name}`}
             >
               Like
@@ -67,7 +70,65 @@ const BusinessCard: React.FC<{ business: Business }> = ({ business }) => {
   );
 };
 
-const CardSwiper: React.FC<CardSwiperProps> = ({ businesses }) => {
+export default function CardSwiper({ initialBusinesses }: CardSwiperProps) {
+  const [businesses, setBusinesses] = useState<Business[]>(initialBusinesses);
+  const [offset, setOffset] = useState(20);
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const fetchData = async () => {
+    const apiKey = process.env.API_KEY;
+    const response = await fetch(
+      `https://api.yelp.com/v3/businesses/search?location=london&limit=20&offset=${offset}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${apiKey}`,
+          accept: "application/json",
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch data from Yelp API");
+    }
+
+    const result: any = await response.json();
+    const newBusinesses: Business[] = result.businesses;
+
+    if (newBusinesses.length > 0) {
+      setBusinesses((prevBusinesses) => [...prevBusinesses, ...newBusinesses]);
+      setOffset(offset + 20);
+    } else {
+      console.log("No more businesses found");
+    }
+  };
+
+  useEffect(() => {
+    const fetchMoreBusinesses = () => {
+      fetchData();
+    };
+
+    if (currentIndex === businesses.length - 1) {
+      fetchMoreBusinesses();
+    }
+  }, [currentIndex, businesses.length]);
+
+  const handleLike = () => {
+    HandleLike(businesses[currentIndex]);
+    nextBusiness();
+  };
+
+  const handleDislike = () => {
+    HandleDislike(businesses[currentIndex]);
+    nextBusiness();
+  };
+
+  const nextBusiness = () => {
+    if (currentIndex < businesses.length - 1) {
+      setCurrentIndex(currentIndex + 1);
+    }
+  };
+
   return (
     <div>
       <div className="text-center">
@@ -76,11 +137,14 @@ const CardSwiper: React.FC<CardSwiperProps> = ({ businesses }) => {
         </h2>
         <p>Like a restaurant to add it to your favourites.</p>
       </div>
-      {businesses.map((business) => (
-        <BusinessCard key={business.id} business={business} />
-      ))}
+      {businesses.length > 0 && (
+        <BusinessCard
+          business={businesses[currentIndex]}
+          key={businesses[currentIndex].id}
+          handleLike={handleLike}
+          handleDislike={handleDislike}
+        />
+      )}
     </div>
   );
-};
-
-export default CardSwiper;
+}
