@@ -4,7 +4,7 @@ export default async function Page() {
   const clerkUser: any = await currentUser();
   const userName = clerkUser.username;
   return (
-    <div className="my-5 text-center">
+    <div className="mx-3 px-2 my-5 text-center">
       <h1 className="text-2xl text-primary mb-5">
         Welcome to your profile page {userName}.
       </h1>
