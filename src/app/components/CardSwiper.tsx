@@ -10,6 +10,7 @@ interface Business {
   name: string;
   image_url: string;
   rating: number;
+  review_count: number;
 }
 
 const BusinessCard: React.FC<{
@@ -42,8 +43,11 @@ const BusinessCard: React.FC<{
             >
               {business.name}
             </h1>
-            <h3 className="mt-2 text-secondary text-xl md:text-2xl">
+            <h3 className="mt-2 text-primary text-xl md:text-2xl">
               Rating: {business.rating}
+            </h3>
+            <h3 className="mt-4 accent text-l md:text-xl">
+              Review Count: {business.review_count}
             </h3>
           </div>
           <div className="flex justify-center md:justify-start mt-4">

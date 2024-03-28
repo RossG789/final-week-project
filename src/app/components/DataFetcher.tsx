@@ -1,5 +1,3 @@
-// DataFetcher.tsx
-
 import { useState, useEffect, useCallback } from "react";
 
 interface Business {
@@ -7,6 +5,7 @@ interface Business {
   name: string;
   image_url: string;
   rating: number;
+  review_count: number;
 }
 
 export default function DataFetcher() {
